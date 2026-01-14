@@ -1,0 +1,366 @@
+/* ================= RESET ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: #e5e7eb;
+    line-height: 1.6;
+}
+
+/* ================= HEADER ================= */
+.main-title {
+    color: #ffffff;
+    font-weight: 800;
+    letter-spacing: -1px;
+    font-size: 2.5rem;
+}
+
+.subtitle {
+    color: #c7d2fe;
+    opacity: 0.9;
+    font-size: 1.1rem;
+    margin-top: 8px;
+}
+
+.helper-text {
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 10px;
+}
+
+/* ================= CARD FORM ================= */
+.card-custom {
+    background: linear-gradient(180deg, #ffffff, #f8fafc);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+    color: #0f172a;
+    transition: all 0.3s ease;
+}
+
+.card-custom h4,
+.card-custom h5 {
+    font-weight: 800;
+    color: #020617;
+}
+
+/* ================= INPUTS ================= */
+input,
+textarea {
+    border-radius: 14px !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 14px !important;
+    font-size: 14px;
+    background: #f8fafc !important;
+    color: #020617 !important;
+    transition: all 0.25s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+input:focus,
+textarea:focus {
+    outline: none !important;
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
+    background: #ffffff !important;
+}
+
+.image-hint {
+    display: block;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 10px;
+}
+
+/* ================= PREVIEW ================= */
+.landing-preview {
+    background: linear-gradient(135deg, #ffffff, #eef2ff);
+    border-radius: 28px;
+    padding: 42px;
+    min-height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 36px;
+    box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55);
+    transition: all 0.35s ease;
+}
+
+.landing-preview:hover {
+    transform: translateY(-6px);
+}
+
+/* ================= CONTENT ================= */
+.landing-content {
+    max-width: 56%;
+}
+
+.landing-content h1 {
+    font-size: 38px;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    color: #020617;
+    font-weight: 800;
+}
+
+.landing-content h3 {
+    color: #4f46e5;
+    margin-bottom: 18px;
+    font-weight: 700;
+}
+
+.landing-content p {
+    color: #334155;
+    font-size: 15.5px;
+    line-height: 1.7;
+    margin-bottom: 26px;
+}
+
+/* ================= CTA ================= */
+.landing-content button {
+    padding: 15px 42px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #4f46e5, #6366f1);
+    color: white;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 14px 35px rgba(79, 70, 229, 0.45);
+}
+
+.landing-content button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 20px 55px rgba(79, 70, 229, 0.65);
+}
+
+/* ================= IMAGE ================= */
+.landing-image {
+    width: 300px;
+    position: relative;
+}
+
+.landing-image img {
+    width: 100%;
+    border-radius: 22px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    object-fit: cover;
+    display: none;
+}
+
+#imagePlaceholder {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #1e1b4b;
+    font-size: 13px;
+    text-align: center;
+    padding: 14px;
+    font-weight: 700;
+}
+
+/* ================= STATUS ================= */
+.image-status {
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* ================= BOTÕES ================= */
+.export-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 15px 32px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #020617, #1e293b);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 14px 35px rgba(2, 6, 23, 0.6);
+    transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 20px 55px rgba(2, 6, 23, 0.8);
+    background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+.btn,
+button {
+    padding: 14px 30px;
+    border-radius: 16px !important;
+    border: none !important;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Sucesso */
+.btn-success {
+    background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 30px rgba(34, 197, 94, 0.45);
+}
+
+/* Primário */
+.btn-primary {
+    background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 30px rgba(79, 70, 229, 0.45);
+}
+
+/* Perigo */
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 30px rgba(239, 68, 68, 0.45);
+}
+
+/* ================= LIST ================= */
+.landing-item {
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    padding: 18px 24px;
+    border-radius: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+    color: #020617;
+    font-weight: 700;
+}
+
+.landing-item:hover {
+    transform: translateX(8px);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+}
+
+.landing-card.active {
+    border: 2px solid #0f172a;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
+}
+
+/* ================= SERVICE BANNER ================= */
+.service-banner {
+    margin: 60px 0 40px;
+    padding: 48px 36px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #020617, #0f172a);
+    color: #ffffff;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.service-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.25), transparent 60%);
+}
+
+.service-content {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.service-content h3 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: #ffffff;
+}
+
+.service-content p {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #c7d2fe;
+    margin-bottom: 26px;
+}
+
+.service-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 38px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 16px 40px rgba(34, 197, 94, 0.45);
+}
+
+.service-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 24px 60px rgba(34, 197, 94, 0.65);
+    text-decoration: none;
+    color: #ffffff;
+}
+
+/* ================= ANIMATIONS ================= */
+.service-banner.highlight {
+    animation: pulseBanner 1.2s ease;
+}
+
+@keyframes pulseBanner {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(34, 197, 94, 0);
+    }
+
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+.landing-preview.highlight {
+    animation: previewPulse 1.2s ease;
+}
+
+@keyframes previewPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(15, 23, 42, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 12
