@@ -1,3 +1,4 @@
+/* ================= GLOBAL ================= */
 * {
     margin: 0;
     padding: 0;
@@ -52,6 +53,7 @@ textarea {
     font-size: 14px;
     background: #f8fafc !important;
     color: #020617 !important;
+    width: 100%;
 }
 
 input::placeholder,
@@ -254,6 +256,11 @@ button {
     box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
 }
 
+.landing-card.active {
+    border: 2px solid #0f172a;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.15);
+}
+
 /* ================= SERVICE BANNER ================= */
 .service-banner {
     margin: 60px 0 40px;
@@ -318,8 +325,8 @@ button {
     color: #ffffff;
 }
 
-/* ================= MOBILE ================= */
-@media (max-width: 768px) {
+/* ================= RESPONSIVE ================= */
+@media (max-width: 992px) {
     .landing-preview {
         flex-direction: column;
         text-align: center;
@@ -333,12 +340,7 @@ button {
         width: 100%;
     }
 
-    /* Toggle buttons */
-    .mobile-toggle {
-        display: flex;
-        gap: 4px;
-    }
-
+    /* TOGGLE FORM/PREVIEW */
     #formContainer,
     #previewContainer {
         display: none;
@@ -347,5 +349,33 @@ button {
     #formContainer.active,
     #previewContainer.active {
         display: block;
+    }
+
+    /* MOBILE TOGGLE */
+    .mobile-toggle {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 16px;
+        gap: 12px;
+    }
+
+    .mobile-toggle button {
+        flex: 1;
+        padding: 12px 0;
+        border-radius: 16px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        color: white;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        transition: all 0.3s ease;
+    }
+
+    .mobile-toggle button.active {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+    }
+
+    .mobile-toggle button:hover {
+        transform: scale(1.05);
     }
 }
