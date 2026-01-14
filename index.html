@@ -17,11 +17,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+
 
     <a href="#mainContent" class="sr-only sr-only-focusable">Pular para o conteúdo principal</a>
 
@@ -97,13 +101,19 @@
                     <label for="seoDesc" class="small font-weight-bold">SEO Description</label>
                     <input type="text" id="seoDesc" class="form-control mb-3" placeholder="Descrição curta para Google">
 
-                    <!-- BOTÕES -->
-                    <button type="button" class="btn btn-success btn-block mt-3" onclick="saveLanding()">
-                        💾 Salvar Landing
-                    </button>
-                    <button type="button" class="export-btn" onclick="exportLandingImage()">
-                        ⬇️ Baixar imagem da landing
-                    </button>
+
+                    <div id="formActions" class="my-3"><!-- BOTÕES -->
+                        <button type="button" class="btn btn-success btn-block mt-3" onclick="saveLanding()">
+                            💾 Salvar Landing
+                        </button>
+                        <button type="button" class="export-btn" onclick="exportLandingImage()">
+                            ⬇️ Baixar imagem da landing
+                        </button>
+                        <button type="button" class="btn btn-success btn-block mt-3" onclick="generateLandingHTML()">
+                            📝 Gerar HTML
+                        </button>
+
+                    </div>
 
                     <div id="formFeedback" class="image-status" role="alert" aria-live="assertive"></div>
                 </div>
