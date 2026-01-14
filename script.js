@@ -29,13 +29,12 @@ const showPreviewBtn = document.getElementById("showPreviewBtn");
 
 function toggleMobileView(view) {
     if (!formContainer || !previewContainer || !showFormBtn || !showPreviewBtn) return;
-
     if (view === "form") {
         formContainer.classList.add("active");
         previewContainer.classList.remove("active");
         showFormBtn.classList.add("active");
         showPreviewBtn.classList.remove("active");
-    } else if (view === "preview") {
+    } else {
         formContainer.classList.remove("active");
         previewContainer.classList.add("active");
         showFormBtn.classList.remove("active");
@@ -47,7 +46,6 @@ function toggleMobileView(view) {
 if (showFormBtn && showPreviewBtn) {
     showFormBtn.addEventListener("click", () => toggleMobileView("form"));
     showPreviewBtn.addEventListener("click", () => toggleMobileView("preview"));
-
     if (window.innerWidth <= 768) toggleMobileView("form");
 }
 
@@ -58,7 +56,10 @@ function updatePreview() {
     previewText.innerText = textInput.value || "Criamos páginas otimizadas para transformar visitantes em clientes.";
     previewBtn.innerText = ctaInput.value || "Quero saber mais";
     previewBtn.style.background = ctaColorInput.value || "#4f46e5";
-    landingPreview.style.background = bgColorInput.value || "linear-gradient(135deg, #ffffff, #eef2ff)";
+
+    // Substitui gradiente por cor sólida para evitar erros no canvas
+    const bg = bgColorInput.value || "#ffffff";
+    landingPreview.style.background = bg;
 
     const imageUrl = imageInput.value.trim();
     if (!imageUrl) {
@@ -84,6 +85,7 @@ function loadImageSmart(url) {
     };
 
     previewImage.onerror = () => {
+        // Tenta proxy para CORS
         const proxiedUrl = `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
         previewImage.src = proxiedUrl;
 
@@ -111,7 +113,6 @@ document.querySelectorAll("input, textarea").forEach(el => {
 // ================= SAVE LANDING =================
 function saveLanding() {
     const landings = JSON.parse(localStorage.getItem("landings")) || [];
-
     const landing = {
         title: titleInput.value,
         subtitle: subtitleInput.value,
@@ -142,7 +143,6 @@ function saveLanding() {
 function renderList() {
     const list = document.getElementById("landingList");
     list.innerHTML = "";
-
     const landings = JSON.parse(localStorage.getItem("landings")) || [];
 
     if (landings.length === 0) {
@@ -173,10 +173,7 @@ function renderList() {
         `;
 
         div.addEventListener("click", () => openLandingInPreview(i));
-        div.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") openLandingInPreview(i);
-        });
-
+        div.addEventListener("keydown", e => { if (e.key === "Enter") openLandingInPreview(i); });
         list.appendChild(div);
     });
 }
@@ -198,7 +195,6 @@ function editLanding(index) {
 
     editIndex = index;
     updatePreview();
-
     if (window.innerWidth <= 768) toggleMobileView("form");
 }
 
@@ -230,22 +226,17 @@ function exportLandingImage() {
     imageStatus.innerText = "⏳ Gerando imagem...";
     imageStatus.className = "image-status info";
 
-    // ===================== TRATAR BACKGROUND =====================
-    const computedStyle = getComputedStyle(landingPreview);
-    let bg = computedStyle.backgroundImage;
-
-    // Se for gradiente, substituímos por cor sólida aproximada
-    if (bg && bg.includes("gradient")) {
-        bg = bgColorInput.value || "#eef2ff";
-    } else if (bg && bg !== "none") {
-        bg = bgColorInput.value || bg;
-    } else {
-        bg = bgColorInput.value || "#eef2ff";
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+        imageStatus.innerText = "⚠️ Para baixar a imagem use um computador ou ative o modo desktop no navegador.";
+        imageStatus.className = "image-status error";
+        return;
     }
 
+    const originalBg = getComputedStyle(landingPreview).backgroundImage;
+    let bg = originalBg.includes("gradient") ? bgColorInput.value : originalBg;
     landingPreview.style.background = bg;
 
-    // ===================== GERAR IMAGEM =====================
     html2canvas(landingPreview, {
         useCORS: true,
         allowTaint: false,
@@ -254,59 +245,21 @@ function exportLandingImage() {
     })
     .then(canvas => {
         if (!canvas) throw new Error("Canvas não gerado");
-
-        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-        if (isMobile) {
-            // Mobile: usamos toBlob com fallback
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    // Se não há imagem ou falhou no blob
-                    imageStatus.innerText = "⚠️ Não foi possível gerar o arquivo no celular. Use o modo computador para realizar o download.";
-                    imageStatus.className = "image-status warning";
-                    return;
-                }
-
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = "landing-page.png";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-
-                imageStatus.innerText = "✅ Imagem gerada! Verifique sua galeria/downloads.";
-                imageStatus.className = "image-status success";
-            }, "image/png");
-        } else {
-            // Desktop: download normal
-            const link = document.createElement("a");
-            link.download = "landing-page.png";
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-            imageStatus.innerText = "✅ Imagem exportada com sucesso!";
-            imageStatus.className = "image-status success";
-        }
+        const link = document.createElement("a");
+        link.download = "landing-page.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+        imageStatus.innerText = "✅ Imagem exportada com sucesso!";
+        imageStatus.className = "image-status success";
+        landingPreview.style.background = originalBg;
     })
     .catch(err => {
         console.error(err);
-        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-        if (isMobile) {
-            imageStatus.innerText = "❌ Falha ao gerar a imagem no celular. Verifique se há imagens ou use o computador para download.";
-        } else {
-            imageStatus.innerText = "❌ Falha ao gerar imagem. Verifique se todas as imagens e estilos são suportados.";
-        }
-
+        imageStatus.innerText = "❌ Falha ao gerar imagem. Verifique imagens e cores.";
         imageStatus.className = "image-status error";
+        landingPreview.style.background = originalBg;
     });
-
-    highlightServiceBanner();
 }
-
-
-
 
 // ================= ABRIR LANDING NO PREVIEW =================
 function openLandingInPreview(index) {
@@ -326,7 +279,7 @@ function openLandingInPreview(index) {
 
     editIndex = index;
     updatePreview();
-    landingPreview.style.background = l.bgColor || "linear-gradient(135deg, #ffffff, #eef2ff)";
+    landingPreview.style.background = l.bgColor || "#ffffff";
 
     requestAnimationFrame(() => {
         setTimeout(() => {
@@ -343,7 +296,7 @@ function openLandingInPreview(index) {
             }
         }, 180);
     });
- 
+
     if (window.innerWidth <= 768) toggleMobileView("preview");
 }
 
@@ -351,7 +304,6 @@ function openLandingInPreview(index) {
 function highlightServiceBanner() {
     const banner = document.querySelector(".service-banner");
     if (!banner) return;
-
     banner.scrollIntoView({ behavior: "smooth", block: "center" });
     banner.classList.add("highlight");
     setTimeout(() => banner.classList.remove("highlight"), 1200);
