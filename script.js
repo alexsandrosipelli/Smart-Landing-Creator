@@ -227,51 +227,86 @@ function clearForm() {
 
 // ================= EXPORT IMAGE =================
 function exportLandingImage() {
-    html2canvas(landingPreview, { useCORS: true, allowTaint: true, backgroundColor: null, scale: 2 })
-        .then(canvas => {
-            // Detecta mobile
-            if (/Mobi|Android/i.test(navigator.userAgent)) {
-                // Cria modal de visualização
-                const modal = document.createElement("div");
-                modal.style.position = "fixed";
-                modal.style.inset = 0;
-                modal.style.background = "rgba(0,0,0,0.85)";
-                modal.style.display = "flex";
-                modal.style.justifyContent = "center";
-                modal.style.alignItems = "center";
-                modal.style.zIndex = 9999;
-                modal.style.padding = "20px";
-                modal.style.cursor = "pointer";
-                modal.addEventListener("click", () => document.body.removeChild(modal));
+    imageStatus.innerText = "⏳ Gerando imagem...";
+    imageStatus.className = "image-status info";
 
-                const img = document.createElement("img");
-                img.src = canvas.toDataURL("image/png");
-                img.style.maxWidth = "100%";
-                img.style.maxHeight = "100%";
-                img.style.borderRadius = "16px";
-                img.style.boxShadow = "0 10px 40px rgba(0,0,0,0.7)";
-                modal.appendChild(img);
+    // ===================== TRATAR BACKGROUND =====================
+    const computedStyle = getComputedStyle(landingPreview);
+    let bg = computedStyle.backgroundImage;
 
-                document.body.appendChild(modal);
+    // Se for gradiente, substituímos por cor sólida aproximada
+    if (bg && bg.includes("gradient")) {
+        bg = bgColorInput.value || "#eef2ff";
+    } else if (bg && bg !== "none") {
+        bg = bgColorInput.value || bg;
+    } else {
+        bg = bgColorInput.value || "#eef2ff";
+    }
 
-                imageStatus.innerText = "✅ Imagem gerada! Toque na imagem e segure para salvar.";
-                imageStatus.className = "image-status success";
-            } else {
-                // Desktop: download direto
+    landingPreview.style.background = bg;
+
+    // ===================== GERAR IMAGEM =====================
+    html2canvas(landingPreview, {
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: bg,
+        scale: 2
+    })
+    .then(canvas => {
+        if (!canvas) throw new Error("Canvas não gerado");
+
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            // Mobile: usamos toBlob com fallback
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    // Se não há imagem ou falhou no blob
+                    imageStatus.innerText = "⚠️ Não foi possível gerar o arquivo no celular. Use o modo computador para realizar o download.";
+                    imageStatus.className = "image-status warning";
+                    return;
+                }
+
+                const url = URL.createObjectURL(blob);
                 const link = document.createElement("a");
+                link.href = url;
                 link.download = "landing-page.png";
-                link.href = canvas.toDataURL("image/png");
+                document.body.appendChild(link);
                 link.click();
-                imageStatus.innerText = "✅ Imagem exportada com sucesso!";
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+
+                imageStatus.innerText = "✅ Imagem gerada! Verifique sua galeria/downloads.";
                 imageStatus.className = "image-status success";
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            imageStatus.innerText = "❌ Erro ao gerar imagem.";
-            imageStatus.className = "image-status error";
-        });
+            }, "image/png");
+        } else {
+            // Desktop: download normal
+            const link = document.createElement("a");
+            link.download = "landing-page.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            imageStatus.innerText = "✅ Imagem exportada com sucesso!";
+            imageStatus.className = "image-status success";
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            imageStatus.innerText = "❌ Falha ao gerar a imagem no celular. Verifique se há imagens ou use o computador para download.";
+        } else {
+            imageStatus.innerText = "❌ Falha ao gerar imagem. Verifique se todas as imagens e estilos são suportados.";
+        }
+
+        imageStatus.className = "image-status error";
+    });
+
+    highlightServiceBanner();
 }
+
+
+
 
 // ================= ABRIR LANDING NO PREVIEW =================
 function openLandingInPreview(index) {
@@ -308,7 +343,7 @@ function openLandingInPreview(index) {
             }
         }, 180);
     });
-
+ 
     if (window.innerWidth <= 768) toggleMobileView("preview");
 }
 
