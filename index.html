@@ -5,11 +5,9 @@
     <meta charset="UTF-8">
     <title>Smart Landing Creator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <!-- Favicon -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link rel="icon" href="img/Favicon.png" type="image/png">
-
     <!-- SEO básico -->
     <meta name="description"
         content="Crie landing pages modernas, acessíveis e focadas em conversão com o Smart Landing Creator.">
@@ -25,35 +23,39 @@
 
 <body>
 
-    <!-- Skip link para acessibilidade -->
     <a href="#mainContent" class="sr-only sr-only-focusable">Pular para o conteúdo principal</a>
 
-    <div class="container my-5" id="mainContent" role="main">
+    <div class="container my-4" id="mainContent" role="main">
 
         <!-- HEADER -->
-        <header class="text-center mb-5" aria-labelledby="appTitle">
+        <header class="text-center mb-4" aria-labelledby="appTitle">
             <h1 class="main-title" id="appTitle">Smart Landing Creator</h1>
             <p class="subtitle" id="appDescription">
                 Crie landing pages modernas, responsivas, acessíveis e focadas em conversão
             </p>
         </header>
 
+        <!-- TOGGLE MOBILE -->
+        <div class="mobile-toggle d-md-none mb-3">
+            <button id="showFormBtn" class="btn btn-primary w-50">Formulário</button>
+            <button id="showPreviewBtn" class="btn btn-success w-50">Preview</button>
+        </div>
+
         <div class="row">
 
             <!-- FORM -->
-            <section class="col-lg-5 mb-4" aria-labelledby="formTitle">
+            <section class="col-lg-5 mb-4" id="formContainer">
                 <div class="card-custom" role="form" aria-describedby="formHelp">
 
                     <h2 class="h4 mb-2" id="formTitle">Criar / Editar Landing</h2>
                     <p class="helper-text" id="formHelp">
-                        Preencha os campos abaixo. A landing será atualizada em tempo real ao lado.
+                        Preencha os campos abaixo. A landing será atualizada em tempo real.
                     </p>
 
                     <!-- TÍTULO -->
                     <label for="title" class="small font-weight-bold">Título principal</label>
                     <input type="text" id="title" class="form-control mb-2" placeholder="Ex: Aumente suas vendas hoje"
-                        aria-required="true" aria-describedby="titleHelp">
-                    <small id="titleHelp" class="sr-only">Digite o título principal da sua landing page</small>
+                        aria-required="true">
 
                     <!-- SUBTÍTULO -->
                     <label for="subtitle" class="small font-weight-bold">Subtítulo</label>
@@ -67,8 +69,7 @@
 
                     <!-- COR DE FUNDO -->
                     <label for="bgColor" class="small font-weight-bold mt-2">Cor de fundo da landing</label>
-                    <input type="color" id="bgColor" class="form-control mb-3"
-                        aria-label="Escolher cor de fundo da landing" value="#eef2ff">
+                    <input type="color" id="bgColor" class="form-control mb-3" value="#eef2ff">
 
                     <!-- CTA -->
                     <label for="cta" class="small font-weight-bold">Texto do botão (CTA)</label>
@@ -76,20 +77,15 @@
 
                     <!-- COR CTA -->
                     <label for="ctaColor" class="small font-weight-bold mt-2">Cor do botão</label>
-                    <input type="color" id="ctaColor" class="form-control mb-3" aria-label="Escolher cor do botão"
-                        value="#0f172a">
+                    <input type="color" id="ctaColor" class="form-control mb-3" value="#0f172a">
 
                     <!-- IMAGEM -->
                     <label for="image" class="small font-weight-bold">Imagem da landing (URL direta)</label>
-                    <input type="url" id="image" class="form-control mb-1" placeholder="https://exemplo.com/imagem.jpg"
-                        aria-describedby="imageHint imageStatus">
-                    <small class="image-hint" id="imageHint">
-                        ⚠️ Use links diretos terminando em <strong>.jpg, .png, .webp</strong><br>
-                        ✔️ Unsplash, seu site, CDN e WordPress funcionam<br>
-                        ❌ Links de Google Imagens, Pinterest e Freepik não funcionam
-                    </small>
+                    <input type="url" id="image" class="form-control mb-1" placeholder="https://exemplo.com/imagem.jpg">
 
-                    <!-- STATUS IMAGEM -->
+                    <small class="image-hint">
+                        ⚠️ Use links diretos terminando em <strong>.jpg, .png, .webp</strong>
+                    </small>
                     <div id="imageStatus" class="image-status" role="status" aria-live="polite"></div>
 
                     <hr>
@@ -102,81 +98,66 @@
                     <input type="text" id="seoDesc" class="form-control mb-3" placeholder="Descrição curta para Google">
 
                     <!-- BOTÕES -->
-                    <button type="button" class="btn btn-success btn-block mt-3" onclick="saveLanding()"
-                        aria-label="Salvar landing page">
+                    <button type="button" class="btn btn-success btn-block mt-3" onclick="saveLanding()">
                         💾 Salvar Landing
                     </button>
-                    <button type="button" class="export-btn" onclick="exportLandingImage()"
-                        aria-label="Baixar imagem da landing page">
+                    <button type="button" class="export-btn" onclick="exportLandingImage()">
                         ⬇️ Baixar imagem da landing
                     </button>
 
                     <div id="formFeedback" class="image-status" role="alert" aria-live="assertive"></div>
-
                 </div>
             </section>
 
             <!-- PREVIEW -->
-            <section class="col-lg-7" aria-labelledby="previewTitleSection">
-                <h2 class="sr-only" id="previewTitleSection">Pré-visualização da landing</h2>
+            <section class="col-lg-7" id="previewContainer">
                 <div class="landing-preview" id="landingExportArea" role="region"
                     aria-label="Pré-visualização da landing page">
 
                     <div class="landing-content">
                         <h1 id="previewTitle">Aumente suas vendas com uma landing profissional</h1>
                         <h3 id="previewSubtitle">Design moderno, rápido e focado em conversão</h3>
-                        <p id="previewText">
-                            Criamos páginas otimizadas para transformar visitantes em clientes, com foco em UX,
-                            performance e resultados reais.
-                        </p>
-                        <button id="previewBtn" aria-label="Botão de chamada para ação">
-                            Quero saber mais
-                        </button>
+                        <p id="previewText">Criamos páginas otimizadas para transformar visitantes em clientes.</p>
+                        <button id="previewBtn">Quero saber mais</button>
                     </div>
 
-                    <div class="landing-image" aria-label="Imagem da landing">
+                    <div class="landing-image">
                         <img id="previewImage" src="" alt="Imagem ilustrativa da landing page" crossorigin="anonymous">
                         <div id="imagePlaceholder" aria-hidden="true">
                             <strong>Imagem da landing</strong><br>
                             Insira uma URL válida para visualizar aqui
                         </div>
                     </div>
-
                 </div>
             </section>
 
         </div>
 
         <!-- SERVICE BANNER -->
-        <section class="service-banner" aria-label="Serviço personalizado">
+        <section class="service-banner">
             <div class="service-content">
                 <h3>Precisa de uma landing page diferente?</h3>
                 <p>
                     Se este modelo não atende exatamente o seu negócio, nós criamos uma landing page
-                    <strong>100% personalizada</strong> para você, focada em conversão, UX e performance.
-                    É só nos dizer como você quer!
+                    <strong>100% personalizada</strong> para você.
                 </p>
                 <a href="https://wa.me/5511948914961?text=Olá! Quero uma landing page personalizada." target="_blank"
-                    class="service-btn" aria-label="Entrar em contato pelo WhatsApp">
+                    class="service-btn">
                     📲 Falar no WhatsApp
                 </a>
             </div>
         </section>
 
         <!-- LIST -->
-        <hr class="my-5">
-        <section aria-labelledby="listTitle">
-            <h2 class="h4 mb-3" id="listTitle">Landings Criadas</h2>
-            <div id="landingList" role="list" aria-live="polite" aria-label="Lista de landings criadas">
-                <!-- Itens inseridos via JS -->
-            </div>
+        <hr class="my-4">
+        <section>
+            <h2 class="h4 mb-3">Landings Criadas</h2>
+            <div id="landingList" role="list" aria-live="polite"></div>
         </section>
 
     </div>
 
-    <!-- html2canvas -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <!-- Script -->
     <script src="script.js"></script>
 </body>
 
