@@ -57,9 +57,10 @@ function updatePreview() {
     previewBtn.innerText = ctaInput.value || "Quero saber mais";
     previewBtn.style.background = ctaColorInput.value || "#4f46e5";
 
-    // Substitui gradiente por cor sólida para evitar erros no canvas
-    const bg = bgColorInput.value || "#ffffff";
-    landingPreview.style.background = bg;
+    // ===================== FUNDO =====================
+    // Usa o background real ou o input, preservando gradiente
+    const computedBg = landingPreview.dataset.bgOriginal || bgColorInput.value || "#ffffff";
+    landingPreview.style.background = computedBg;
 
     const imageUrl = imageInput.value.trim();
     if (!imageUrl) {
@@ -182,22 +183,52 @@ function renderList() {
 function editLanding(index) {
     const landings = JSON.parse(localStorage.getItem("landings")) || [];
     const l = landings[index];
+    if (!l) return;
 
-    titleInput.value = l.title;
-    subtitleInput.value = l.subtitle;
-    textInput.value = l.text;
-    ctaInput.value = l.cta;
-    ctaColorInput.value = l.color;
-    bgColorInput.value = l.bgColor || "#ffffff";
-    imageInput.value = l.image;
-    seoTitleInput.value = l.seoTitle;
-    seoDescInput.value = l.seoDesc;
+    // Preenche inputs com os valores da landing selecionada
+    titleInput.value = l.title || "";
+    subtitleInput.value = l.subtitle || "";
+    textInput.value = l.text || "";
+    ctaInput.value = l.cta || "";
+    ctaColorInput.value = l.color || "#4f46e5";
+    bgColorInput.value = l.bgColor || "#ffffff"; // mantém gradiente ou cor real
+    imageInput.value = l.image || "";
+    seoTitleInput.value = l.seoTitle || "";
+    seoDescInput.value = l.seoDesc || "";
 
     editIndex = index;
-    updatePreview();
-    if (window.innerWidth <= 768) toggleMobileView("form");
-    clearForm();
+
+    // ================= ATUALIZA PREVIEW =================
+    previewTitle.innerText = titleInput.value || "Aumente suas vendas com uma landing profissional";
+    previewSubtitle.innerText = subtitleInput.value || "Design moderno, rápido e focado em conversão";
+    previewText.innerText = textInput.value || "Criamos páginas otimizadas para transformar visitantes em clientes.";
+    previewBtn.innerText = ctaInput.value || "Quero saber mais";
+    previewBtn.style.background = ctaColorInput.value || "#4f46e5";
+
+    // Aplica fundo correto (pode ser gradiente ou cor sólida)
+    landingPreview.style.background = l.bgColor || "#ffffff";
+
+    // Carrega a imagem se houver
+    const imageUrl = imageInput.value.trim();
+    if (imageUrl) {
+        loadImageSmart(imageUrl);
+    } else {
+        previewImage.style.display = "none";
+        imagePlaceholder.style.display = "flex";
+        imageStatus.innerText = "🖼️ Insira uma URL de imagem.";
+        imageStatus.className = "image-status info";
+    }
+
+    // Sobe para o preview com destaque
+    landingPreview.scrollIntoView({ behavior: "smooth", block: "start" });
+    landingPreview.classList.remove("highlight");
+    void landingPreview.offsetWidth; // força reflow para animação
+    landingPreview.classList.add("highlight");
+
+    // Em mobile, mostra o preview
+    if (window.innerWidth <= 768) toggleMobileView("preview");
 }
+
 
 // ================= DELETE LANDING =================
 function deleteLanding(index) {
@@ -330,9 +361,10 @@ function generateLandingHTML() {
     const subtitle = subtitleInput.value || "Subtítulo da Landing";
     const text = textInput.value || "Descrição detalhada da landing page.";
     const ctaText = ctaInput.value || "Chamada para ação";
-    const ctaColor = ctaColorInput.value || "#4f46e5";
+    const ctaColor = ctaColorInput.value || "#fff";
     const imageUrl = imageInput.value || "";
-    const bgColor = bgColorInput.value || "#ffffff";
+    const computedStyle = getComputedStyle(landingPreview);
+const bgColor = computedStyle.background; // pega cor ou gradiente real aplicado
 
     const htmlContent = `
 <!DOCTYPE html>
@@ -423,7 +455,7 @@ function generateLandingHTML() {
     link.click();
 
     alert("✅ HTML da landing gerado com sucesso! Você pode abrir o arquivo no navegador.");
-    clearForm();
+     highlightServiceBanner()
 }
 // ================= MODELOS DE LANDINGS =================
 const landingTemplates = [
